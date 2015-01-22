@@ -24,14 +24,15 @@ try:
 except:
   print 'Import of ogr and osr from osgeo failed\n\n'
 
+
 #########################################################################
 ## Creating a driver for Shapefile
 driverName = "ESRI Shapefile"
 drv = ogr.GetDriverByName( driverName )
 if drv is None:
-    print "%s driver not available.\n" % driverName
+  print "%s driver not available.\n" % driverName
 else:
-    print  "%s driver IS available.\n" % driverName
+  print  "%s driver IS available.\n" % driverName
 
 ## Creating shape file
 fn = "Exercise14.shp"
@@ -66,15 +67,15 @@ Mangawhai.CreateFeature(featureb)
 qgis.utils.iface.addVectorLayer(fn, layername, "ogr") 
 print "shp file made"
 
-########################################################################
 
+########################################################################
 ## Creating a driver for kml
 driverName2 = "KML"
 drv2 = ogr.GetDriverByName( driverName2 )
 if drv2 is None:
-    print "%s driver not available.\n" % driverName2
+  print "%s driver not available.\n" % driverName2
 else:
-    print  "%s driver IS available.\n" % driverName2
+  print  "%s driver IS available.\n" % driverName2
 
 ## Creating kml file
 fn1 = "Exercise14kml.kml"
