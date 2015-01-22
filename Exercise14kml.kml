@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document><Folder><name>Mangawhaikml</name>
+  <Placemark>
+      <Point><coordinates>-36.0946,174.585736,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+      <Point><coordinates>-36.09531,174.591133,0</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
