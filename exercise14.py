@@ -1,34 +1,31 @@
-#set working directory
+# Team: ZeaPol
+# Team Members: Roeland de Koning / Barbara Sienkiewicz
+# Date: 23/01/2015
+# Exercise 14
+
+
+## Setting working directory
 import os
 os.chdir('/home/user/data/Exercise14')
 print os.getcwd()
 
-#import ogr
+## Importing ogr and osr
 from osgeo import ogr
-
-## Create 1st point geometry
-#beach = "POINT (-36543.08 1743528.24)"  
-#ptbeach = ogr.CreateGeometryFromWkt(beach)
-#print(ptbeach)
-#
-## Create 2nd point geometry
-#home = "POINT ( -36540.56 174358.65)"  
-#pthome = ogr.CreateGeometryFromWkt(home)
-#print(pthome)
-
 from osgeo import osr
-##  spatial reference
+
+## Spatial reference: http://spatialreference.org/ref/epsg/wgs-84/
 spatialReference = osr.SpatialReference()
-spatialReference.ImportFromEPSG(4326)  # from EPSG - Lat/long
+spatialReference.ImportFromEPSG(4326)
 
 ## Loading osgeo
 try:
   from osgeo import ogr, osr
-  print 'Import of ogr and osr from osgeo worked.  Hurray!\n'
+  print 'Import of ogr and osr from osgeo worked. Hurray!\n'
 except:
   print 'Import of ogr and osr from osgeo failed\n\n'
 
-## Is the ESRI Shapefile driver available?
+#########################################################################
+## Creating a driver for Shapefile
 driverName = "ESRI Shapefile"
 drv = ogr.GetDriverByName( driverName )
 if drv is None:
@@ -36,51 +33,42 @@ if drv is None:
 else:
     print  "%s driver IS available.\n" % driverName
 
-## choose your own name
-## make sure this layer does not exist in your 'data' folder
+## Creating shape file
 fn = "Exercise14.shp"
 layername = "Mangawhai"
-
-## Create shape file
 ds = drv.CreateDataSource(fn)
 print ds.GetRefCount()
 
-## Create Layer
+## Creating Layer
 Mangawhai = ds.CreateLayer(layername, spatialReference, ogr.wkbPoint)
-## Now check your data folder and you will see that the file has been created!
-## From now on it is not possible anymore to CreateDataSource with the same name
-## in your workdirectory untill your remove the name.shp name.shx and name.dbf file.
 print(Mangawhai.GetExtent())
 
-# Create a point
+## Creating 2 points
 pthome = ogr.Geometry(ogr.wkbPoint)
 ptbeach = ogr.Geometry(ogr.wkbPoint)
-#
-### SetPoint(self, int point, double x, double y, double z = 0)
-pthome.SetPoint(0,-36.094600,174.585736)  
-ptbeach.SetPoint(0,-36.095310,174.591133)
 
-## Back to the pyramid, we still have no Feature
-## Feature is defined from properties of the layer:e.g:
+## SetPoint(self, int point, double x, double y, double z = 0)
+pthome.SetPoint(0, 174.585736, -36.094600)  
+ptbeach.SetPoint(0, 174.591133, -36.095310)
 
+## Defining features
 layerDefinition = Mangawhai.GetLayerDefn()
 featureh = ogr.Feature(layerDefinition)
 featureb = ogr.Feature(layerDefinition)
 
-### Lets add the points to the feature
+## Adding points to the features
 featureh.SetGeometry(pthome)
 featureb.SetGeometry(ptbeach)
 
-## Lets store the feature in a layer
+## Storing features in a layer
 Mangawhai.CreateFeature(featureh)
 Mangawhai.CreateFeature(featureb)
-
 qgis.utils.iface.addVectorLayer(fn, layername, "ogr") 
+print "shp file made"
 
-print 'shp file made'
+########################################################################
 
-print "create KML file"
-
+## Creating a driver for kml
 driverName2 = "KML"
 drv2 = ogr.GetDriverByName( driverName2 )
 if drv2 is None:
@@ -88,43 +76,29 @@ if drv2 is None:
 else:
     print  "%s driver IS available.\n" % driverName2
 
-## choose your own name
-## make sure this layer does not exist in your 'data' folder
+## Creating kml file
 fn1 = "Exercise14kml.kml"
 layername1 = "Mangawhaikml"
-
-## Create shape file
 ds1 = drv2.CreateDataSource(fn1)
 print ds1.GetRefCount()
 
+## Creating Layer
 Mangawhaikml = ds1.CreateLayer(layername1, spatialReference, ogr.wkbPoint)
 
-layerDefinition = Mangawhaikml.GetLayerDefn()
+## Defining features
+layerDefinition = Mangawhaikml.GetLayerDefn() 
 featurekmlh = ogr.Feature(layerDefinition)
 featurekmlb = ogr.Feature(layerDefinition)
 
-### Lets add the points to the feature
+### Adding points to the features
 featurekmlh.SetGeometry(pthome)
 featurekmlb.SetGeometry(ptbeach)
 
-## Lets store the feature in a layer
+## Storing features in a layer
 Mangawhaikml.CreateFeature(featurekmlh)
 Mangawhaikml.CreateFeature(featurekmlb)
-
 qgis.utils.iface.addVectorLayer(fn1, layername1, "ogr") 
-
-print 'kml file made'
-
-
-
-## Saving the file, but OGR doesn't have a Save() option
-## The shapefile is updated with all object structure 
-## when the script finished of when it is destroyed, 
-# if necessay SyncToDisk() maybe used
+print "kml file made"
 
 ds.Destroy()
 ds1.Destroy()
-## below the output is shown of the above Python script that is run in the terminal
-
-
-
